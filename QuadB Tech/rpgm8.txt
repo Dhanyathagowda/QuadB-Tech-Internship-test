@@ -1,0 +1,68 @@
+//8.Given a binary tree, implement a function that returns the maximum depth of the tree.
+
+
+use std::io;
+
+// Define the structure for the binary tree
+struct TreeNode {
+    val: i32,
+    left: Option<Box<TreeNode>>,
+    right: Option<Box<TreeNode>>,
+}
+
+impl TreeNode {
+    // Constructor for the TreeNode
+    fn new(val: i32) -> Self {
+        TreeNode { val, left: None, right: None }
+    }
+}
+
+// Function to calculate the maximum depth of the binary tree
+fn max_depth(root: Option<Box<TreeNode>>) -> i32 {
+    match root {
+        None => 0,
+        Some(node) => {
+            let left_depth = max_depth(node.left);
+            let right_depth = max_depth(node.right);
+            1 + left_depth.max(right_depth)
+        }
+    }
+}
+
+// Function to read input from the user
+fn read_tree_node(prompt: &str) -> Option<Box<TreeNode>> {
+    println!("{}", prompt);
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+    let val: i32 = input.trim().parse().expect("Please enter a valid integer");
+
+    let mut left_node = None;
+    let mut right_node = None;
+
+    if ask_user("Does the node have a left child? (y/n): ") {
+       left_node = read_tree_node("Enter the value for the left node: ");
+    }
+
+    if ask_user("Does the node have a right child? (y/n): ") {
+        right_node = read_tree_node("Enter the value for the right node: ");
+    }
+
+    Some(Box::new(TreeNode {
+        val,
+        left: left_node,
+        right: right_node,
+    }))
+}
+
+// Function to ask the user for a yes/no input
+fn ask_user(prompt: &str) -> bool {
+    println!("{}", prompt);
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+    input.trim().to_lowercase() == "y"
+}
+
+fn main() {
+    let root = read_tree_node("Enter the value for the root node: ");
+    println!("Maximum depth of the tree: {}", max_depth(root));
+}

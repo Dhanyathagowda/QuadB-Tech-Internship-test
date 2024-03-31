@@ -1,0 +1,54 @@
+//11.Merge two sorted arrays in Rust
+use std::io;
+
+fn merge_sorted_arrays(arr1: &mut Vec<i32>, arr2: &mut Vec<i32>) -> Vec<i32> {
+    let mut merged = Vec::new();
+    let (mut i, mut j) = (0, 0);
+
+    while i < arr1.len() && j < arr2.len() {
+        if arr1[i] < arr2[j] {
+            merged.push(arr1[i]);
+            i += 1;
+        } else {
+            merged.push(arr2[j]);
+            j += 1;
+        }
+    }
+
+    while i < arr1.len() {
+        merged.push(arr1[i]);
+        i += 1;
+    }
+
+    while j < arr2.len() {
+        merged.push(arr2[j]);
+        j += 1;
+    }
+
+    merged
+}
+
+fn main() {
+    let mut array1 = Vec::new();
+    let mut array2 = Vec::new();
+
+    println!("Enter elements for the first sorted array (separated by spaces):");
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+    for num in input.trim().split_whitespace() {
+        array1.push(num.parse().expect("Invalid input. Please enter only integers."));
+    }
+
+    println!("Enter elements for the second sorted array (separated by spaces):");
+    input.clear();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+    for num in input.trim().split_whitespace() {
+        array2.push(num.parse().expect("Invalid input. Please enter only integers."));
+    }
+
+    array1.sort(); // Assuming input is not sorted
+    array2.sort(); // Assuming input is not sorted
+
+    let merged_array = merge_sorted_arrays(&mut array1, &mut array2);
+    println!("Merged array: {:?}", merged_array);
+}

@@ -1,0 +1,27 @@
+//3.Given a string of words, implement a function that returns the shortest word in the string.
+use std::io;
+
+fn find_shortest_words(input_string: &str) -> Vec<&str> {
+    let words: Vec<&str> = input_string.split_whitespace().collect();
+    let shortest_length = words.iter().map(|word| word.len()).min().unwrap_or(0);
+    words
+        .iter()
+        .filter(|&word| word.len() == shortest_length)
+        .cloned()
+        .collect()
+}
+
+fn main() {
+    println!("Please enter a string of words:");
+
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+
+    let shortest_words = find_shortest_words(input.trim());
+
+    if shortest_words.is_empty() {
+        println!("No words were entered.");
+    } else {
+        println!("The shortest word(s) is/are: {:?}", shortest_words);
+    }
+}
